@@ -14,6 +14,17 @@ use Illuminate\Http\Request;
 */
 // Auth::routes();
 
+Route::middleware('auth:api')->resource('users', 'UserController',['only' => [
+    'update','destroy','index'
+]]);
+
+Route::resource('users', 'UserController',['only' => [
+    'show'
+]]);
+
+Route::middleware('auth:api')->get('users/{user}/roles','UserController@roles');
+Route::middleware('auth:api')->get('users/{role}/permissions','RoleController@permissions');
+
 Route::middleware('auth:api')->resource('roles', 'RoleController',['only' => [
     'store','update','destroy'
 ]]);
@@ -22,15 +33,10 @@ Route::resource('roles', 'RoleController',['only' => [
     'index','show'
 ]]);
 
+
 Route::resource('permissions', 'PermissionController',['only' => [
     'index','show'
 ]]);
-
-
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-  return $request->user();
-});
 
 
 Route::post('auth/register', 'Auth\RegisterController@register');

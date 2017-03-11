@@ -19,6 +19,8 @@ class RolePermissionSeeder extends Seeder
         $admin = (new Role())->fill(['name' => 'admin', 'display_name' => 'Administrator', 'description' => 'User is allowed to manage and edit other users']);
         $admin->save();
 
+        $read_users=(new Permission())->fill(['name' => 'read-users', 'display_name' => 'Read Users', 'description' => '']);
+        $edit_user->save();
         $edit_user=(new Permission())->fill(['name' => 'edit-user', 'display_name' => 'Edit User', 'description' => '']);
         $edit_user->save();
         $delete_user=(new Permission())->fill(['name' => 'delete-user', 'display_name' => 'Delete User', 'description' => '']);
@@ -34,8 +36,17 @@ class RolePermissionSeeder extends Seeder
         $delete_role=(new Permission())->fill(['name' => 'delete-role', 'display_name' => 'delete Role', 'description' => '']);
         $delete_role->save();
 
+        $read_user_roles= (new Permission())->fill(['name' => 'read-user-roles', 'display_name' => 'Read User Roles', 'description' => '']);
+        $read_user_roles->save();
+        $edit_user_roles= (new Permission())->fill(['name' => 'edit-user-roles', 'display_name' => 'Edit User Roles', 'description' => '']);
+        $edit_user_roles->save();
 
-        $admin->attachPermissions(array($edit_user,$delete_user,$edit_permission,$create_role,$edit_role,$delete_role));
+        $read_role_permissions= (new Permission())->fill(['name' => 'read-role-permissions', 'display_name' => 'Read Role Permissions', 'description' => '']);
+        $read_role_permissions->save();
+        $edit_role_permissions= (new Permission())->fill(['name' => 'edit-role-permissions', 'display_name' => 'Edit Role Permissions', 'description' => '']);
+        $edit_role_permissions->save();
+
+        $admin->attachPermissions(array($read_users,$edit_user,$delete_user,$edit_permission,$create_role,$edit_role,$delete_role,$read_user_roles,$edit_user_roles,$read_role_permissions,$edit_role_permissions));
         $admin->save();
     }
 }

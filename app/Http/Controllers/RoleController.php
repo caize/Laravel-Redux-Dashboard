@@ -164,4 +164,19 @@ class RoleController extends Controller
       // 'description' => 'required|min:6',
     ]);
   }
+  public function permissions($id){
+      $user = Auth::user();
+      if(!$user->can('read-role-permissions')){
+        return Response::json([
+          'error' => "Forbidden",
+        ], 403);
+      }
+      $role=Role::find($id);
+      if(!$role){
+        return Response::json([
+          'error' => "Not Found",
+        ], 404);
+      }
+      return $role->permissions->all();
+  }
 }
