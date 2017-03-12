@@ -23,7 +23,10 @@ Route::resource('users', 'UserController',['only' => [
 ]]);
 
 Route::middleware('auth:api')->get('users/{user}/roles','UserController@roles');
-Route::middleware('auth:api')->get('users/{role}/permissions','RoleController@permissions');
+Route::middleware('auth:api')->put('users/{user}/roles/{role}','UserController@updateroles');
+Route::middleware('auth:api')->get('roles/{role}/permissions','RoleController@permissions');
+Route::middleware('auth:api')->put('roles/{role}/permissions/{permission}','RoleController@updatepermissions');
+
 
 Route::middleware('auth:api')->resource('roles', 'RoleController',['only' => [
     'store','update','destroy'

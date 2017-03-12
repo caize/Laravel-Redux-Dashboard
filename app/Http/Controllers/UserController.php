@@ -127,4 +127,30 @@ class UserController extends Controller
       }
       return $user->roles->all();
     }
+    public function updateroles(Request $request,$uid,$rid){
+      $user = Auth::user();
+      if(!$user->can('edit-user-roles')){
+        return Response::json([
+          'error' => "Forbidden",
+        ], 403);
+      }
+      $user=User::find($uid);
+      $role=Role::find($rid);
+
+      if(!$user or !$role){
+          return Response::json([
+            'error' => "Not Found",
+          ], 404);
+      }
+      $flag =$request->status;
+      if($user->hasRole($role->name)==$flag)
+      {
+        return Response::json([
+          'error' => "Conflict",
+        ], 409);
+      }
+      $flag? $user->attachRole($role):$user->detachRole($role);
+      return Response::json(['status'=>'ok']);
+
+    }
 }

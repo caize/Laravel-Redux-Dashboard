@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 // use Validator;
 // use Response;
 use App\Role;
+use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -178,5 +179,32 @@ class RoleController extends Controller
         ], 404);
       }
       return $role->permissions->all();
+  }
+
+  public function updatepermissions(Request $request,$rid,$pid){
+    $user = Auth::user();
+    if(!$user->can('edit-role-permissions')){
+      return Response::json([
+        'error' => "Forbidden",
+      ], 403);
+    }
+
+    $role=Role::find($rid);
+    $permission=Permission::find($pid);
+
+    if(!$permission or !$role){
+        return Response::json([
+          'error' => "Not Found",
+        ], 404);
+    }
+    $flag =$request->status;
+    if($role->hasPermission($permission->name)==$flag)
+    {
+      return Response::json([
+        'error' => "Conflict",
+      ], 409);
+    }
+    $flag? $role->attachPermission($permission):$role->detachPermission($permission);
+    return Response::json(['status'=>'ok']);
   }
 }

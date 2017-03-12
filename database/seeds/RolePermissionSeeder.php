@@ -46,7 +46,17 @@ class RolePermissionSeeder extends Seeder
         $edit_role_permissions= (new Permission())->fill(['name' => 'edit-role-permissions', 'display_name' => 'Edit Role Permissions', 'description' => '']);
         $edit_role_permissions->save();
 
-        $admin->attachPermissions(array($read_users,$edit_user,$delete_user,$edit_permission,$create_role,$edit_role,$delete_role,$read_user_roles,$edit_user_roles,$read_role_permissions,$edit_role_permissions));
+        $admin->attachPermissions(array($read_users,\
+        $edit_user,\
+        $delete_user,\
+        $edit_permission,\
+        $create_role,\
+        $edit_role,\
+        $delete_role,\
+        $read_user_roles,\
+        $edit_user_roles,\
+        $read_role_permissions,\
+        $edit_role_permissions));
         $admin->save();
     }
 }
