@@ -12,6 +12,7 @@
 */
 // use Illuminate\Http\Request;
 
+Route::get('/','IndexController@index');
 // Route::get('/', function () {
 //   return view('welcome');
 // });
