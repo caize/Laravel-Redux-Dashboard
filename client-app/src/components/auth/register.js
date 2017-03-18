@@ -23,19 +23,19 @@ const styleSheet = createStyleSheet('Login', () => ({
         margin: "auto",
     },
     button: {
-        left: 230
+        left: 210
     }
 }));
 
-export default function Login(props, context) {
+export default function Register(props, context) {
     let username;
+    let email;
     let password;
 
     function handleSubmit(e) {
-      if(username.input.value && password.input.value){
-        props.loginUser(username.input.value, password.input.value);
+      if(username.input.value &&email.input.value&& password.input.value){
+        props.registerUser(username.input.value, email.input.value,password.input.value);
       }
-
     }
 
     const classes = context.styleManager.render(styleSheet);
@@ -43,7 +43,7 @@ export default function Login(props, context) {
     return (
         <div>
             <Card className={classes.card}>
-                <CardHeader className={classes.header} title="Login"/>
+                <CardHeader className={classes.header} title="Register"/>
                 <Divider/>
                 <CardContent>
                     <Layout>
@@ -59,6 +59,15 @@ export default function Login(props, context) {
                         <FormControl className={classes.input}>
                             <Input
                                 ref={node => {
+                                    email = node
+                                }}
+                                id="email"
+                                placeholder="email"
+                            />
+                        </FormControl>
+                        <FormControl className={classes.input}>
+                            <Input
+                                ref={node => {
                                     password = node
                                 }}
                                 id="password"
@@ -67,32 +76,25 @@ export default function Login(props, context) {
                         </FormControl>
 
                         <Layout item xs={12}>
-                            <LabelSwitch
-                                checked={true}
-                                label="Remember me"
-                            />
-                        </Layout>
-                        <Layout item xs={12}>
                             <Button
                                 raised primary className={classes.button}
                                 onClick={(e) => handleSubmit(e)}
                             >
-                                Login
+                                Register
                             </Button>
                         </Layout>
                     </Layout>
                 </CardContent>
                 <Divider/>
                 <CardActions>
-                    <Button compact primary>Forget Password?</Button>
-                    <Button compact primary>Register</Button>
+                    <Button compact primary>have a account? Login</Button>
                 </CardActions>
             </Card>
         </div>
     );
 }
 
-Login.contextTypes = {
+Register.contextTypes = {
     styleManager: customPropTypes.muiRequired,
-    loginUser: React.PropTypes.func.isRequired,
+    registerUser: React.PropTypes.func.isRequired,
 };

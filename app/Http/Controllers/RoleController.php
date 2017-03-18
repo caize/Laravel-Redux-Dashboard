@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Response;
 
 class RoleController extends Controller
 {
-  /**
+    /**
   * Display a listing of the resource.
   *
   * @return \Illuminate\Http\Response
   */
   public function index()
   {
-    return Role::all();
+      return Role::all();
   }
 
   /**
@@ -32,7 +32,7 @@ class RoleController extends Controller
   */
   public function create(array $data)
   {
-    return Role::create([
+      return Role::create([
       'name' => $data['name'],
       'display_name' => $data['display_name'],
       'description' => $data['description'],
@@ -47,20 +47,20 @@ class RoleController extends Controller
   */
   public function store(Request $request)
   {
-    $user = Auth::user();
-    if(!$user->can('create-role')){
-      return Response::json([
+      $user = Auth::user();
+      if (!$user->can('create-role')) {
+          return Response::json([
         'error' => "Forbidden",
       ], 403);
-    }
-    $rq=$request->all();
-    $rq['id']='0';
-    $validate = $this->validator($rq);
-    if ($validate->fails()) {
-      return $validate->errors();
-    }
-    $this->create($request->all());
-    return response()->json(['status' => 'ok']);
+      }
+      $rq=$request->all();
+      $rq['id']='0';
+      $validate = $this->validator($rq);
+      if ($validate->fails()) {
+          return $validate->errors();
+      }
+      $this->create($request->all());
+      return response()->json(['status' => 'ok']);
   }
 
   /**
@@ -71,13 +71,13 @@ class RoleController extends Controller
   */
   public function show($id)
   {
-    $role=Role::find($id);
-    if(!$role){
-      return Response::json([
+      $role=Role::find($id);
+      if (!$role) {
+          return Response::json([
         'error' => "Not Found",
       ], 404);
-    }
-    return Role::find($id);
+      }
+      return Role::find($id);
   }
 
   /**
@@ -88,7 +88,7 @@ class RoleController extends Controller
   */
   public function edit(Role $role)
   {
-    //
+      //
   }
 
   /**
@@ -98,31 +98,31 @@ class RoleController extends Controller
   * @param  \App\Role  $role
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request,$id)
+  public function update(Request $request, $id)
   {
-    $user = Auth::user();
-    if(!$user->can('edit-role')){
-      return Response::json([
+      $user = Auth::user();
+      if (!$user->can('edit-role')) {
+          return Response::json([
         'error' => "Forbidden",
       ], 403);
-    }
-    $role=Role::find($id);
-    if(!$role){
-      return Response::json([
+      }
+      $role=Role::find($id);
+      if (!$role) {
+          return Response::json([
         'error' => "Not Found",
       ], 404);
-    }
-    $rq=$request->all();
-    $rq["id"]=$id;
-    $validate = $this->validator($rq);
-    if ($validate->fails()) {
-      return $validate->errors();
-    }
-    $role->name=$rq['name'];
-    $role->display_name=$rq['display_name'];
-    $role->description=$rq['description'];
-    $role->save();
-    return $role;
+      }
+      $rq=$request->all();
+      $rq["id"]=$id;
+      $validate = $this->validator($rq);
+      if ($validate->fails()) {
+          return $validate->errors();
+      }
+      $role->name=$rq['name'];
+      $role->display_name=$rq['display_name'];
+      $role->description=$rq['description'];
+      $role->save();
+      return $role;
   }
   /**
   * Remove the specified resource from storage.
@@ -132,25 +132,25 @@ class RoleController extends Controller
   */
   public function destroy($id)
   {
-    $user = Auth::user();
-    if(!$user->can('delete-role')){
-      return Response::json([
+      $user = Auth::user();
+      if (!$user->can('delete-role')) {
+          return Response::json([
         'error' => "Forbidden",
       ], 403);
-    }
-    $role=Role::find($id);
-    if(!$role){
-      return Response::json([
+      }
+      $role=Role::find($id);
+      if (!$role) {
+          return Response::json([
         'error' => "Gone",
       ], 410);
-    }
-    $role->delete();
-    return response()->json(['status' => 'ok']);
+      }
+      $role->delete();
+      return response()->json(['status' => 'ok']);
   }
 
-  protected function validator(array $data)
-  {
-    return Validator::make($data, [
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
       // 'name' => 'required|max:255|unique:roles,'."12",
       'name'=> [
         'required',
@@ -164,47 +164,48 @@ class RoleController extends Controller
       ],
       // 'description' => 'required|min:6',
     ]);
-  }
-  public function permissions($id){
-      $user = Auth::user();
-      if(!$user->can('read-role-permissions')){
-        return Response::json([
+    }
+    public function permissions($id)
+    {
+        $user = Auth::user();
+        if (!$user->can('read-role-permissions')) {
+            return Response::json([
           'error' => "Forbidden",
         ], 403);
-      }
-      $role=Role::find($id);
-      if(!$role){
-        return Response::json([
+        }
+        $role=Role::find($id);
+        if (!$role) {
+            return Response::json([
           'error' => "Not Found",
         ], 404);
-      }
-      return $role->permissions->all();
-  }
+        }
+        return $role->permissions->all();
+    }
 
-  public function updatepermissions(Request $request,$rid,$pid){
-    $user = Auth::user();
-    if(!$user->can('edit-role-permissions')){
-      return Response::json([
+    public function updatepermissions(Request $request, $rid, $pid)
+    {
+        $user = Auth::user();
+        if (!$user->can('edit-role-permissions')) {
+            return Response::json([
         'error' => "Forbidden",
       ], 403);
-    }
+        }
 
-    $role=Role::find($rid);
-    $permission=Permission::find($pid);
+        $role=Role::find($rid);
+        $permission=Permission::find($pid);
 
-    if(!$permission or !$role){
-        return Response::json([
+        if (!$permission or !$role) {
+            return Response::json([
           'error' => "Not Found",
         ], 404);
-    }
-    $flag =$request->status;
-    if($role->hasPermission($permission->name)==$flag)
-    {
-      return Response::json([
+        }
+        $flag =$request->status;
+        if ($role->hasPermission($permission->name)==$flag) {
+            return Response::json([
         'error' => "Conflict",
       ], 409);
+        }
+        $flag? $role->attachPermission($permission):$role->detachPermission($permission);
+        return Response::json(['status'=>'ok']);
     }
-    $flag? $role->attachPermission($permission):$role->detachPermission($permission);
-    return Response::json(['status'=>'ok']);
-  }
 }

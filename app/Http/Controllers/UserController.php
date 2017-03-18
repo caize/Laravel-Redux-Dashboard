@@ -17,14 +17,14 @@ class UserController extends Controller
      */
     public function index()
     {
-      $user = Auth::user();
-      if(!$user->can('read-users')){
-        return Response::json([
+        $user = Auth::user();
+        if (!$user->can('read-users')) {
+            return Response::json([
           'error' => "Forbidden",
         ], 403);
-      }
-        return User::with(['roles'=>function($query){
-          $query->select('name');
+        }
+        return User::with(['roles'=>function ($query) {
+            $query->select('name');
         }])->get();
     }
 
@@ -58,8 +58,8 @@ class UserController extends Controller
     public function show($id)
     {
         $user=User::find($id);
-        if(!$user){
-          return Response::json([
+        if (!$user) {
+            return Response::json([
             'error' => "Not Found",
           ], 404);
         }
@@ -98,59 +98,59 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if(!$user->can('delete-user')){
-          return Response::json([
+        if (!$user->can('delete-user')) {
+            return Response::json([
             'error' => "Forbidden",
           ], 403);
         }
         $user=User::find($id);
-        if(!$user){
-          return Response::json([
+        if (!$user) {
+            return Response::json([
             'error' => "Gone",
           ], 410);
         }
         $user->delete();
         return response()->json(['status' => 'ok']);
     }
-    public function roles($id){
-      $user = Auth::user();
-      if(!$user->can('read-user-roles')){
-        return Response::json([
+    public function roles($id)
+    {
+        $user = Auth::user();
+        if (!$user->can('read-user-roles')) {
+            return Response::json([
           'error' => "Forbidden",
         ], 403);
-      }
-      $user=User::find($id);
-      if(!$user){
-          return Response::json([
+        }
+        $user=User::find($id);
+        if (!$user) {
+            return Response::json([
             'error' => "Not Found",
           ], 404);
-      }
-      return $user->roles->all();
+        }
+        return $user->roles->all();
     }
-    public function updateroles(Request $request,$uid,$rid){
-      $user = Auth::user();
-      if(!$user->can('edit-user-roles')){
-        return Response::json([
+    public function updateroles(Request $request, $uid, $rid)
+    {
+        $user = Auth::user();
+        if (!$user->can('edit-user-roles')) {
+            return Response::json([
           'error' => "Forbidden",
         ], 403);
-      }
-      $user=User::find($uid);
-      $role=Role::find($rid);
+        }
+        $user=User::find($uid);
+        $role=Role::find($rid);
 
-      if(!$user or !$role){
-          return Response::json([
+        if (!$user or !$role) {
+            return Response::json([
             'error' => "Not Found",
           ], 404);
-      }
-      $flag =$request->status;
-      if($user->hasRole($role->name)==$flag)
-      {
-        return Response::json([
+        }
+        $flag =$request->status;
+        if ($user->hasRole($role->name)==$flag) {
+            return Response::json([
           'error' => "Conflict",
         ], 409);
-      }
-      $flag? $user->attachRole($role):$user->detachRole($role);
-      return Response::json(['status'=>'ok']);
-
+        }
+        $flag? $user->attachRole($role):$user->detachRole($role);
+        return Response::json(['status'=>'ok']);
     }
 }

@@ -11,7 +11,7 @@
 |
 */
 // use Illuminate\Http\Request;
-
+// Auth::routes();
 Route::get('/','IndexController@index');
 // Route::get('/', function () {
 //   return view('welcome');
@@ -47,3 +47,5 @@ Route::get('/','IndexController@index');
 //
 //   return json_decode((string) $response->getBody(), true);
 // });
+
+// Route::get('/home', 'HomeController@index');

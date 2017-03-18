@@ -6,3 +6,7 @@ export function createReducer(initialState, reducerMap) {
             : state;
     };
 }
+
+export function parseJSON(response) {
+    return response.data;
+}

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -49,8 +48,8 @@ class PermissionController extends Controller
     public function show($id)
     {
         $permission=Permission::find($id);
-        if(!$permission){
-          return Response::json([
+        if (!$permission) {
+            return Response::json([
             'error' => "Not Found",
           ], 404);
         }
